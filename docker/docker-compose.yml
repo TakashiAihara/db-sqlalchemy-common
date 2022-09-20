@@ -1,0 +1,76 @@
+version: '3.9'
+
+services:
+  rotating-tor-http-proxy:
+    ports:
+      - '3128:3128'
+      - '4444:4444'
+    environment:
+      - TOR_INSTANCES=20
+      - TOR_REBUILD_INTERVAL=1800
+      - TZ=Asia/Tokyo
+    image: zhaowde/rotating-tor-http-proxy
+
+  packager:
+    image: python:${PYTHON_VERSION}-slim
+    volumes:
+      - python_packages:/usr/local/lib/python${PYTHON_VERSION}/dist-packages
+    command: pip3 install ${PYTHON_PACKAGES}
+
+  scrapyd:
+    build:
+      context: 'https://github.com/EasyPi/docker-scrapyd.git'
+      dockerfile: Dockerfile
+    ports:
+      - "6800:6800"
+    volumes:
+      - scrapyd_data:/var/lib/scrapyd
+      - python_packages:/usr/local/lib/python${PYTHON_VERSION}/dist-packages
+      - ./scrapyd.conf:/etc/scrapyd/scrapyd.conf:ro
+    restart: unless-stopped
+    environment:
+      - TZ=Asia/Tokyo
+
+  scrapyrt:
+    build:
+      context: https://github.com/EasyPi/docker-scrapyd.git
+      dockerfile: Dockerfile
+    command: scrapyrt -i 0.0.0.0 -p 9080
+    ports:
+      - "9080:9080"
+    restart: unless-stopped
+
+
+  scrapyd:
+    image: vimagick/scrapyd:py3
+    ports:
+      - "6800:6800"
+    volumes:
+      - ./data:/var/lib/scrapyd
+      - /usr/local/lib/python3.10/dist-packages
+    restart: unless-stopped
+
+    COPY ./scrapyd.conf /etc/scrapyd/
+    VOLUME /etc/scrapyd/ /var/lib/scrapyd/
+
+  scrapy:
+    image: vimagick/scrapyd:py3
+    command: bash
+    volumes:
+      - .:/code
+    working_dir: /code
+    restart: unless-stopped
+
+  scrapyrt:
+    image: vimagick/scrapyd:py3
+    command: scrapyrt -i 0.0.0.0 -p 9080
+    ports:
+      - "9080:9080"
+    volumes:
+      - .:/code
+    working_dir: /code
+    restart: unless-stopped
+
+volumes:
+  python_packages:
+  scrapyd_data:

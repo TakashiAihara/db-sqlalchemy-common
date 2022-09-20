@@ -1,0 +1,12 @@
+# To execute this pipeline, shell something like:
+# pypyr echo text goes here
+context_parser: pypyr.parser.string
+steps:
+  - name: pypyr.steps.echo
+    in:
+      echoMe: '{argString}'
+
+docker-compose --env-file docker/.env -f docker/docker-compose.yml up -d
+    "common:up": "docker compose --env-file .env.${environment} -p clitter_${environment} -f docker/${environment}/docker-compose.yml -f docker/common/docker-compose.yml up -d --build",
+    "common:down": "docker compose -p clitter_${environment} -f docker/${environment}/docker-compose.yml -f docker/common/docker-compose.yml down",
+    "development:up": "cross-env environment=\"development\" pnpm run common:up",
