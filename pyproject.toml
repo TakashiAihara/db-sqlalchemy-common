@@ -30,7 +30,7 @@ classifiers = [
 
 [tool.poetry.dependencies]
 GitPython = "^3.1.27"
-SQLAlchemy = "^1.4.39"
+SQLAlchemy = "^1.4.41"
 SQLAlchemy-Utils = "^0.38.3"
 Scrapy = "^2.6.2"
 alembic = "^1.8.1"
