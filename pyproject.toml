@@ -42,7 +42,7 @@ pydantic = "^1.9.1"
 pytest-cov = "^3.0.0"
 python = "^3.10"
 python-dotenv = "^0.20.0"
-pytz = "^2022.2.1"
+pytz = "^2022.7"
 pyutils = {git = "https://github.com/TakashiAihara/pyutils.git", rev = "main"}
 
 [tool.poetry.dev-dependencies]
