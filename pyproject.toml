@@ -32,7 +32,7 @@ classifiers = [
 GitPython = "^3.1.27"
 SQLAlchemy = "^1.4.39"
 SQLAlchemy-Utils = "^0.38.3"
-Scrapy = "^2.6.2"
+Scrapy = "^2.8.0"
 alembic = "^1.8.1"
 fire = "^0.4.0"
 importlib_metadata = {version = "^4.5.0", python = "<3.8"}
